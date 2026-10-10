@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Tab Stash",
+  "version": "1.0.0",
+  "description": "Group tabs by domain, stash them, restore later.",
+  "permissions": ["tabs", "storage"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Tab Stash"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header>
+    <h1>Tab Stash</h1>
+    <button id="stash-current" title="Stash current tab">+ Stash current</button>
+  </header>
+
+  <section>
+    <h2>Open tabs</h2>
+    <div id="open-tabs">
+      <div class="empty">Loading…</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Stashed <span id="stash-count"></span></h2>
+    <div id="stashed">
+      <div class="empty">Nothing stashed yet.</div>
+    </div>
+  </section>
+
+  <script src="popup.js"></script>
+</body>
+</html>
