@@ -108,3 +108,18 @@ h2 {
   font-size: 12px;
   padding: 4px 0;
 }
+
+#search {
+  width: 100%;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 12px;
+  background: white;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+#search:focus { border-color: #4f46e5; }
+#search::placeholder { color: #aaa; }

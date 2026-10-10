@@ -24,7 +24,6 @@ async function renderOpenTabs() {
   const container = $("#open-tabs");
   container.innerHTML = "";
 
-  // group by domain
   const groups = {};
   for (const t of tabs) {
     const d = domainOf(t.url || "");
@@ -67,7 +66,7 @@ function tabRow(tab, mode) {
     };
 
     const stashBtn = document.createElement("button");
-    stashBtn.textContent = "💾";
+    stashBtn.textContent = "S";
     stashBtn.title = "Stash this tab";
     stashBtn.onclick = async (e) => {
       e.stopPropagation();
@@ -84,7 +83,6 @@ function tabRow(tab, mode) {
     };
     actions.appendChild(stashBtn);
   } else {
-    // stashed
     row.onclick = async () => {
       await chrome.tabs.create({ url: tab.url });
       const stash = await getStash();
@@ -95,7 +93,7 @@ function tabRow(tab, mode) {
     };
 
     const del = document.createElement("button");
-    del.textContent = "✕";
+    del.textContent = "x";
     del.title = "Remove from stash";
     del.onclick = async (e) => {
       e.stopPropagation();
@@ -113,6 +111,8 @@ function tabRow(tab, mode) {
 }
 
 // ---------- stashed list ----------
+let searchTerm = "";
+
 async function renderStashed() {
   const stash = await getStash();
   $("#stash-count").textContent = stash.length ? `(${stash.length})` : "";
@@ -124,7 +124,21 @@ async function renderStashed() {
     return;
   }
 
-  [...stash].reverse().forEach((t) => container.appendChild(tabRow(t, "stashed")));
+  const reversed = [...stash].reverse();
+
+  const filtered = searchTerm
+    ? reversed.filter((t) => {
+        const haystack = `${t.title || ""} ${t.url || ""}`.toLowerCase();
+        return haystack.includes(searchTerm);
+      })
+    : reversed;
+
+  if (!filtered.length) {
+    container.innerHTML = '<div class="empty">No matches.</div>';
+    return;
+  }
+
+  filtered.forEach((t) => container.appendChild(tabRow(t, "stashed")));
 }
 
 // ---------- stash current tab ----------
@@ -142,6 +156,22 @@ $("#stash-current").onclick = async () => {
   await chrome.tabs.remove(tab.id);
   render();
 };
+
+// ---------- search ----------
+const searchInput = $("#search");
+
+searchInput.addEventListener("input", (e) => {
+  searchTerm = e.target.value.trim().toLowerCase();
+  renderStashed();
+});
+
+searchInput.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    searchInput.value = "";
+    searchTerm = "";
+    renderStashed();
+  }
+});
 
 // ---------- render ----------
 async function render() {
