@@ -173,6 +173,41 @@ searchInput.addEventListener("keydown", (e) => {
   }
 });
 
+// ---------- group tabs by domain ----------
+$("#group-tabs").onclick = async () => {
+  const tabs = await chrome.tabs.query({ currentWindow: true });
+
+  const groups = {};
+  for (const t of tabs) {
+    const d = domainOf(t.url || "");
+    (groups[d] ||= []).push(t);
+  }
+
+  const colorPalette = [
+    "grey", "blue", "red", "yellow",
+    "green", "pink", "purple", "cyan", "orange",
+  ];
+
+  let colorIdx = 0;
+
+  for (const [domain, items] of Object.entries(groups)) {
+    if (items.length < 2) continue;
+
+    const tabIds = items.map((t) => t.id);
+    const groupId = await chrome.tabs.group({ tabIds });
+
+    await chrome.tabGroups.update(groupId, {
+      title: domain,
+      color: colorPalette[colorIdx % colorPalette.length],
+      collapsed: false,
+    });
+
+    colorIdx++;
+  }
+
+  window.close();
+};
+
 // ---------- render ----------
 async function render() {
   await renderOpenTabs();

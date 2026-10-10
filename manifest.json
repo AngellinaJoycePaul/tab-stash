@@ -3,7 +3,7 @@
   "name": "Tab Stash",
   "version": "1.0.0",
   "description": "Group tabs by domain, stash them, restore later.",
-  "permissions": ["tabs", "storage"],
+  "permissions": ["tabs", "storage", "tabGroups"],
   "action": {
     "default_popup": "popup.html",
     "default_title": "Tab Stash"

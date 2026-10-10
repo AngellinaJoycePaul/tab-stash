@@ -37,6 +37,11 @@ header button {
 header button:hover { background: rgba(255, 255, 255, 0.3); }
 header button:active { transform: scale(0.97); }
 
+.header-actions {
+  display: flex;
+  gap: 6px;
+}
+
 section {
   padding: 10px 12px;
   border-bottom: 1px solid #eee;
